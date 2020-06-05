@@ -6,18 +6,18 @@ If you run the program again it only downloads files that have changed since the
 
 ## Features/To-Dos
 
-[x] Downloads files of given users active semester via commandline
-    [x] Keeping file structure of Stud.IP
-    [x] Specify username
-    [x] Specify password
-    [x] Specify stud.ip-url
-    [x] Specify output directory
-    [x] Specify chunk size to download big files
-[x] Only download files after given date
-    [x] Save and read download date
-    [x] Possible reset of download date
-[ ] Incremental file download
-    [ ] Indexing
+- [x] Downloads files of given users active semester via commandline
+    - [x] Keeping file structure of Stud.IP
+    - [x] Specify username
+    - [x] Specify password
+    - [x] Specify stud.ip-url
+    - [x] Specify output directory
+    - [x] Specify chunk size to download big files
+- [x] Only download files after given date
+    - [x] Save and read download date
+    - [x] Possible reset of download date
+- [ ] Incremental file download
+    - [ ] Indexing
 
 ## Installation
 
