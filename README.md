@@ -10,14 +10,17 @@ If you run the program again it only downloads files that have changed since the
     - [x] Keeping file structure of Stud.IP
     - [x] Specify username
     - [x] Specify password
-    - [x] Specify stud.ip-url
+    - [x] Specify Stud.IP-URL
     - [x] Specify output directory
     - [x] Specify chunk size to download big files
 - [x] Only download files after given date
     - [x] Save and read download date
     - [x] Possible reset of download date
 - [ ] Incremental file download
-    - [ ] Indexing
+    - [ ] Indexing downloaded files and folders
+- [ ] Logging
+    - [x] Console log
+    - [ ] Log file
 
 ## Installation
 
