@@ -25,7 +25,7 @@ If you run the program again it only downloads files that have changed since the
 
 ## Installation
 
-- create an instance of
+- create an instance of a mysql database
 - `git clone https://github.com/tiyn/studip-crawler`
 - `cd studip-crawler/src/`
 - `pip3install -r requirements` - install dependencies
