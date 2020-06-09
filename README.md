@@ -22,6 +22,9 @@ If you run the program again it only downloads files that have changed since the
 - [ ] Logging
     - [x] Console log
     - [ ] Log file
+- [ ] Docker
+    - DockerHub image
+    - Docker-compose with db
 
 ## Installation
 
