@@ -23,10 +23,13 @@ If you run the program again it only downloads files that have changed since the
     - [x] Console log
     - [x] Log file
     - [x] Specify log level
+- [ ] Docker
+    - DockerHub image
+    - Docker-compose with db
 
 ## Installation
 
-- create an instance of
+- create an instance of a mysql database
 - `git clone https://github.com/tiyn/studip-crawler`
 - `cd studip-crawler/src/`
 - `pip3install -r requirements` - install dependencies
