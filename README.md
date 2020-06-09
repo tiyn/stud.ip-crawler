@@ -19,9 +19,10 @@ If you run the program again it only downloads files that have changed since the
     - [x] Possible reset of download date
 - [x] Incremental file download
     - [x] Store id and chdate of downloaded files
-- [ ] Logging
+- [x] Logging
     - [x] Console log
-    - [ ] Log file
+    - [x] Log file
+    - [x] Specify log level
 
 ## Installation
 

@@ -1,27 +1,27 @@
-#!/bin/env python3
 import time
+import logging as log
 
 import pymysql
 
 
 class Database:
 
-    def __init__(self):
-        self.HOST = None
-        self.PORT = None
-        self.DB_NAME = None
-        self.USER = None
-        self.PASSW = None
-        self.TABLE_FILE = None
+    def __init__(self, host, port, name, user, passwd, reset_dl):
+        self.HOST = host
+        self.PORT = port
+        self.NAME = name
+        self.USER = user
+        self.PASSWD = passwd
+        self.RESET_DL = reset_dl
         self.TABLE_FILE = 'files'
-        self.RESET_DL_DATE = False
+        self.setup_db()
 
     def connect(self):
         return pymysql.connect(
             host=self.HOST,
             port=self.PORT,
             user=self.USER,
-            password=self.PASSW,
+            password=self.PASSWD,
             charset='utf8mb4',
             cursorclass=pymysql.cursors.DictCursor
         )
@@ -29,21 +29,21 @@ class Database:
     def setup_db(self):
         db = self.connect()
         crs = db.cursor()
-        sql_query = "CREATE DATABASE IF NOT EXISTS " + self.DB_NAME
+        sql_query = "CREATE DATABASE IF NOT EXISTS " + self.NAME
         crs.execute(sql_query)
-        db.select_db(self.DB_NAME)
+        db.select_db(self.NAME)
         query = "CREATE TABLE IF NOT EXISTS " + self.TABLE_FILE + \
             "(id CHAR(32) NOT NULL," + \
             "ch_date INT(11) NOT NULL," + \
             "PRIMARY KEY(id))"
         crs.execute(query)
-        print(db)
+        log.debug(db)
 
     def set_last_file_dl(self, file_id, time):
         db = self.connect()
-        db.select_db(self.DB_NAME)
+        db.select_db(self.NAME)
         crs = db.cursor()
-        print('file: ', file_id, ' time: ', time)
+        log.debug('file: ' + file_id + ' time: ' + time)
         query = "INSERT INTO " + self.TABLE_FILE + "(`id`,`ch_date`)" + \
                 "VALUES ('" + file_id + "','" + time + "')" + \
                 "ON DUPLICATE KEY UPDATE `ch_date` = '" + time + "'"
@@ -51,10 +51,10 @@ class Database:
         db.commit()
 
     def get_last_file_dl(self, file_id):
-        if self.RESET_DL_DATE:
+        if self.RESET_DL:
             return None
         db = self.connect()
-        db.select_db(self.DB_NAME)
+        db.select_db(self.NAME)
         crs = db.cursor()
         query = "SELECT ch_date FROM files WHERE id ='" + file_id + "'"
         crs.execute(query)

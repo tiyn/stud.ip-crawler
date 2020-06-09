@@ -1,35 +1,30 @@
-#!/bin/env python3
 import time
-import os
-import argparse
+import logging as log
 
 from tqdm import tqdm
 import requests as req
 from requests.auth import HTTPBasicAuth
 
 
-class Crawler:
+class Studip:
 
-    def __init__(self, db):
-        self.CHUNK_SIZE = None
-        self.STUDIP_DOMAIN = None
-        self.USER = None
+    def __init__(self, chunk_size, domain, user, db):
+        self.CHUNK_SIZE = chunk_size
+        self.DOMAIN = domain
+        self.USER = user
         self.db = db
 
-    def create_dir(self, dir):
-        if not os.path.exists(dir):
-            print('creating folder', dir)
-            os.mkdir(dir)
+    def auth_req(self, url):
+        url = self.DOMAIN + url
+        return req.get(url, auth=self.USER)
 
     def get_uid(self):
-        url = self.STUDIP_DOMAIN + '/api.php/user/'
-        rsp = req.get(url, auth=self.USER)
+        rsp = self.auth_req('/api.php/user/')
         user_id = rsp.json()['user_id']
         return user_id
 
     def get_curr_semester(self):
-        url = self.STUDIP_DOMAIN + '/api.php/semesters/'
-        rsp = req.get(url, auth=self.USER)
+        rsp = self.auth_req('/api.php/semesters/')
         curr_time = int(str(int(time.time())))
         semesters = rsp.json()['collection']
         for sem_uri in semesters:
@@ -41,8 +36,7 @@ class Crawler:
         return 0
 
     def get_ordered_semesters(self):
-        url = self.STUDIP_DOMAIN + '/api.php/semesters/'
-        rsp = req.get(url, auth=self.USER)
+        rsp = self.auth_req('/api.php/semesters/')
         semesters = rsp.json()['collection']
         order_sems = []
         for sem_uri in semesters:
@@ -50,8 +44,7 @@ class Crawler:
         return order_sems
 
     def get_curr_courses(self, user_id, semester):
-        url = self.STUDIP_DOMAIN + '/api.php/user/' + user_id + '/courses'
-        rsp = req.get(url, auth=self.USER)
+        rsp = self.auth_req('/api.php/user/' + user_id + '/courses')
         ord_sems = self.get_ordered_semesters()
         courses = rsp.json()['collection']
         i = 0
@@ -76,15 +69,13 @@ class Crawler:
         return course_list
 
     def get_top_folder(self, course):
-        url = self.STUDIP_DOMAIN + '/api.php/course/' + course + '/top_folder'
-        rsp = req.get(url, auth=self.USER)
+        rsp = self.auth_req('/api.php/course/' + course + '/top_folder')
         top_folder = rsp.json()
         tf_id = top_folder['id']
         return(tf_id)
 
     def get_docs(self, folder):
-        url = self.STUDIP_DOMAIN + '/api.php/folder/' + folder
-        rsp = req.get(url, auth=self.USER)
+        rsp = self.auth_req('/api.php/folder/' + folder)
         docs = rsp.json()['file_refs']
         res_docs = []
         for doc in docs:
@@ -93,16 +84,14 @@ class Crawler:
         return(res_docs)
 
     def download(self, doc):
-        url1 = self.STUDIP_DOMAIN + '/api.php/file/' + doc
-        rsp1 = req.get(url1, auth=self.USER)
+        rsp1 = self.auth_req('/api.php/file/' + doc)
         doc_name = rsp1.json()['name']
         doc_chdate = rsp1.json()['chdate']
         last_dl = self.db.get_last_file_dl(doc)
         if last_dl == None or last_dl < doc_chdate:
-            print('downloading ', doc_name)
-            url2 = self.STUDIP_DOMAIN + '/api.php/file/' + doc + '/download'
-            rsp2 = req.get(url2, auth=self.USER, stream=True)
+            rsp2 = self.auth_req('/api.php/file/' + doc + '/download')
             total_size = int(rsp2.headers.get('content-length', 0))
+            print('downloading ' + doc_name)
             progbar = tqdm(total=total_size, unit='iB', unit_scale=True)
             with open(doc_name, 'wb') as doc_file:
                 for chunk in rsp2.iter_content(self.CHUNK_SIZE):
@@ -111,8 +100,7 @@ class Crawler:
             self.db.set_last_file_dl(str(doc), str(int(time.time())))
 
     def get_subdirs(self, folder):
-        url = self.STUDIP_DOMAIN + '/api.php/folder/' + folder
-        rsp = req.get(url, auth=self.USER)
+        rsp = self.auth_req('/api.php/folder/' + folder)
         subdirs = rsp.json()['subfolders']
         docs = rsp.json()['file_refs']
         res_subdirs = {}
@@ -121,42 +109,3 @@ class Crawler:
             sub_name = subdir['name']
             res_subdirs[sub_id] = sub_name
         return res_subdirs
-
-    def download_folder(self, folder):
-        docs = self.get_docs(folder)
-        for doc in docs:
-            print('found doc ', doc)
-            self.download(doc)
-
-    def download_folder_rec(self, folder, base_dir):
-        print('folder ', folder)
-        self.create_dir(base_dir)
-        self.download_folder(folder)
-        subdirs = self.get_subdirs(folder)
-        os.chdir(base_dir)
-        for subdir in subdirs:
-            subdir_name = subdirs[subdir].replace('/', '-')
-            subdir_path = os.path.join(base_dir, subdir_name)
-            print(subdir_path)
-            self.create_dir(subdir_path)
-            os.chdir(subdir_path)
-            self.download_folder_rec(subdir, subdir_path)
-
-    def download_course(self, course, base_dir):
-        print('course ', course)
-        self.create_dir(base_dir)
-        os.chdir(base_dir)
-        root = self.get_top_folder(course)
-        self.download_folder_rec(root, base_dir)
-
-    def download_curr_courses(self, base_dir):
-        print('Start downloading all current courses')
-        self.create_dir(base_dir)
-        curr_courses = self.get_curr_courses(
-            self.get_uid(), self.get_curr_semester())
-        os.chdir(base_dir)
-        for course in curr_courses:
-            print('course is ', curr_courses[course])
-            course_name = curr_courses[course].replace('/', '-')
-            path = os.path.join(base_dir, course_name)
-            self.download_course(course, path)
