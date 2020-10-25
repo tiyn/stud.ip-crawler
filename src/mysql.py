@@ -17,6 +17,9 @@ class Database:
         self.setup_db()
 
     def connect(self):
+        """
+        Connect to an existing database instance based on the object attributes.
+        """
         return pymysql.connect(
             host=self.HOST,
             port=self.PORT,
@@ -27,6 +30,9 @@ class Database:
         )
 
     def setup_db(self):
+        """
+        Creates a database with tables.
+        """
         db = self.connect()
         crs = db.cursor()
         sql_query = "CREATE DATABASE IF NOT EXISTS " + self.NAME
@@ -40,6 +46,13 @@ class Database:
         log.debug(db)
 
     def set_last_file_dl(self, file_id, time):
+        """
+        Insert a downloaded file to the database.
+
+        Parameters:
+        file_id (string): id of the file downloaded
+        time(int): time the file was downloaded
+        """
         db = self.connect()
         db.select_db(self.NAME)
         crs = db.cursor()
@@ -51,6 +64,15 @@ class Database:
         db.commit()
 
     def get_last_file_dl(self, file_id):
+        """
+        Check when a file was downloaded.
+
+        Parameters:
+        file_id(string): id of the file to check
+
+        Returns:
+        int: time when the file was downloaded last. None if it wasnt downloaded.
+        """
         if self.RESET_DL:
             return None
         db = self.connect()

@@ -15,15 +15,36 @@ class Studip:
         self.db = db
 
     def auth_req(self, url):
+        """
+        Creates a request for a user.
+
+        Parameter:
+        url(string): URL to send the request to
+
+        Returns:
+        string: request
+        """
         url = self.DOMAIN + url
         return req.get(url, auth=self.USER)
 
     def get_uid(self):
+        """
+        Get the user id of the user specified in the object.
+
+        Returns:
+        string: user id
+        """
         rsp = self.auth_req('/api.php/user/')
         user_id = rsp.json()['user_id']
         return user_id
 
     def get_curr_semester(self):
+        """
+        Get the current semester of the studip instance specified in the object.
+
+        Returns:
+        string: id for current semester
+        """
         rsp = self.auth_req('/api.php/semesters/')
         curr_time = int(str(int(time.time())))
         semesters = rsp.json()['collection']
@@ -36,6 +57,12 @@ class Studip:
         return 0
 
     def get_ordered_semesters(self):
+        """
+        Get the a list of semesters of studip instance specified in the object.
+
+        Returns:
+        list(string): all semesters of the user
+        """
         rsp = self.auth_req('/api.php/semesters/')
         semesters = rsp.json()['collection']
         order_sems = []
@@ -44,6 +71,12 @@ class Studip:
         return order_sems
 
     def get_curr_courses(self, user_id, semester):
+        """
+        Get the a list of semesters of studip instance specified in the object.
+
+        Returns:
+        string: id of the current semester
+        """
         rsp = self.auth_req('/api.php/user/' + user_id + '/courses')
         ord_sems = self.get_ordered_semesters()
         courses = rsp.json()['collection']
@@ -69,12 +102,30 @@ class Studip:
         return course_list
 
     def get_top_folder(self, course):
+        """
+        Retrieves the top folder id of a given course.
+
+        Parameters:
+        course (string): course to get the top folder of
+
+        Returns:
+        string: id of the top folder
+        """
         rsp = self.auth_req('/api.php/course/' + course + '/top_folder')
         top_folder = rsp.json()
         tf_id = top_folder['id']
         return(tf_id)
 
     def get_docs(self, folder):
+        """
+        Get all the documents of a given folder.
+
+        Parameters:
+        folder(string): id of the folder to get documents of
+
+        Returns:
+        list(string): ids of the documents
+        """
         rsp = self.auth_req('/api.php/folder/' + folder)
         docs = rsp.json()['file_refs']
         res_docs = []
@@ -84,6 +135,12 @@ class Studip:
         return(res_docs)
 
     def download(self, doc):
+        """
+        Download a document.
+
+        Parameters:
+        doc (string): id of the document to download
+        """
         rsp1 = self.auth_req('/api.php/file/' + doc)
         doc_name = rsp1.json()['name']
         doc_chdate = rsp1.json()['chdate']
@@ -100,6 +157,15 @@ class Studip:
             self.db.set_last_file_dl(str(doc), str(int(time.time())))
 
     def get_subdirs(self, folder):
+        """
+        Get all the subdirectories of a given folder.
+
+        Parameters:
+        folder(string): id of the folder to get subdirectories of
+
+        Returns:
+        list(string): ids of the subdirectories
+        """
         rsp = self.auth_req('/api.php/folder/' + folder)
         subdirs = rsp.json()['subfolders']
         docs = rsp.json()['file_refs']
