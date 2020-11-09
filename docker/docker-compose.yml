@@ -1,0 +1,29 @@
+version: "3.1"
+services:
+    studip:
+        image: tiyn/studip-crawler
+        restart: unless-stopped
+        environment:
+            USER: 'user'
+            PSWD: 'pswd'
+            URL: 'https://url.tld'
+            INTERVAL: 86400
+            HOST: mysql
+            DB_USER: root
+            DB_PSWD: root
+        volumes:
+            - studip_data:/studip/src/data
+
+    mysql:
+        image: mysql
+        restart: unless-stopped
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+        volumes:
+            - studip_db:/var/lib/mysql
+
+volumes:
+    studip_data:
+        driver: local
+    studip_db:
+        driver: local
