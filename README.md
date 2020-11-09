@@ -25,8 +25,8 @@ the last time running it.
   - [x] Log file
   - [x] Specify log level
 - [x] Docker
-      [x] DockerHub image
-      [x] Docker-compose with db
+  - [x] DockerHub image
+  - [x] Docker-compose with db
 
 ## Installation
 
