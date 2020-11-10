@@ -30,6 +30,10 @@ the last time running it.
   - [x] DockerHub image
   - [x] Docker-compose with db
 
+### Errors and workarounds
+
+- [ ] if filename is too long it currently gets skipped
+
 ## Installation
 
 - create an instance of a mysql database
