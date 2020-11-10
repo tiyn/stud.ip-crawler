@@ -1,5 +1,7 @@
 # Stud.IP Crawler
 
+!(stud.ip-crawler-logo)[studip-crawler.png]
+
 This is a program that downloads all files available for a given Stud.IP user.
 It only downloads and searches through the courses in the current semester.
 If you run the program again it only downloads files that have changed since
