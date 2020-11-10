@@ -67,7 +67,7 @@ class Crawler:
         self.create_dir(base_dir)
         curr_courses = self.studip.get_curr_courses(
             self.studip.get_uid(), self.studip.get_curr_semester())
-        log.info('crawling all current courses' + curr_courses)
+        log.info('crawling all current courses')
         os.chdir(base_dir)
         for course in curr_courses:
             log.debug('course is ' + curr_courses[course])

@@ -4,6 +4,7 @@ import logging as log
 #from tqdm import tqdm
 import requests as req
 from requests.auth import HTTPBasicAuth
+import json
 
 
 class Studip:
@@ -72,7 +73,7 @@ class Studip:
         Returns:
         string: id of the current semester
         """
-        rsp = self.auth_req('/api.php/user/' + user_id + '/courses')
+        rsp = self.auth_req('/api.php/user/' + user_id + '/courses?limit=1000')
         ord_sems = self.get_ordered_semesters()
         courses = rsp.json()['collection']
         course_list = {}
@@ -158,7 +159,6 @@ class Studip:
         """
         rsp = self.auth_req('/api.php/folder/' + folder)
         subdirs = rsp.json()['subfolders']
-        docs = rsp.json()['file_refs']
         res_subdirs = {}
         for subdir in subdirs:
             sub_id = subdir['id']
