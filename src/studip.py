@@ -15,8 +15,7 @@ class Studip:
         self.db = db
 
     def auth_req(self, url):
-        """
-        Creates a request for a user.
+        """Creates a request for a user.
 
         Parameter:
         url(string): URL to send the request to
@@ -28,8 +27,7 @@ class Studip:
         return req.get(url, auth=self.USER)
 
     def get_uid(self):
-        """
-        Get the user id of the user specified in the object.
+        """Get the user id of the user specified in the object.
 
         Returns:
         string: user id
@@ -39,8 +37,7 @@ class Studip:
         return user_id
 
     def get_curr_semester(self):
-        """
-        Get the current semester of the studip instance specified in the object.
+        """Get the current semester of the studip instance specified in the object.
 
         Returns:
         string: id for current semester
@@ -57,8 +54,7 @@ class Studip:
         return 0
 
     def get_ordered_semesters(self):
-        """
-        Get the a list of semesters of studip instance specified in the object.
+        """Get the a list of semesters of studip instance specified in the object.
 
         Returns:
         list(string): all semesters of the user
@@ -71,8 +67,7 @@ class Studip:
         return order_sems
 
     def get_curr_courses(self, user_id, semester):
-        """
-        Get the a list of semesters of studip instance specified in the object.
+        """Get the a list of semesters of studip instance specified in the object.
 
         Returns:
         string: id of the current semester
@@ -101,8 +96,7 @@ class Studip:
         return course_list
 
     def get_top_folder(self, course):
-        """
-        Retrieves the top folder id of a given course.
+        """Retrieves the top folder id of a given course.
 
         Parameters:
         course (string): course to get the top folder of
@@ -116,8 +110,7 @@ class Studip:
         return(tf_id)
 
     def get_docs(self, folder):
-        """
-        Get all the documents of a given folder.
+        """Get all the documents of a given folder.
 
         Parameters:
         folder(string): id of the folder to get documents of
@@ -134,8 +127,7 @@ class Studip:
         return(res_docs)
 
     def download(self, doc):
-        """
-        Download a document.
+        """Download a document.
 
         Parameters:
         doc (string): id of the document to download
@@ -156,8 +148,7 @@ class Studip:
             self.db.set_last_file_dl(str(doc), str(int(time.time())))
 
     def get_subdirs(self, folder):
-        """
-        Get all the subdirectories of a given folder.
+        """Get all the subdirectories of a given folder.
 
         Parameters:
         folder(string): id of the folder to get subdirectories of
