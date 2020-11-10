@@ -92,6 +92,7 @@ class Studip:
             curr_ind = ord_sems.index(semester)
             if start_ind <= curr_ind <= end_ind:
                 course_title = course['title']
+                log.info(course_title + " will be downloaded")
                 course_id = course['course_id']
                 course_list[course_id] = course_title
         return course_list
