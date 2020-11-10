@@ -1,7 +1,7 @@
 version: "3.1"
 services:
     studip:
-        image: tiyn/studip-crawler
+        image: tiynger/studip-crawler
         restart: unless-stopped
         environment:
             USER: 'user'
