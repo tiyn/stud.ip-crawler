@@ -149,7 +149,7 @@ class Studip:
                         #progbar.update(len(chunk))
                         doc_file.write(chunk)
                 self.db.set_last_file_dl(str(doc), str(int(time.time())))
-            except FileNotFoundError:
+            except OSError:
                 log.critical("Error while writing to the file " + doc_name)
 
     def get_subdirs(self, folder):
