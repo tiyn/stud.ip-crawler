@@ -75,7 +75,7 @@ Set the following volumes with the -v tag.
 
 #### docker-compose.yml
 
-Copy `docker/docker-compose.yml` and change it to your needs.
+Copy `docker-compose.yml` and change it to your needs.
 Then run `docker-compose up`.
 
 ## Tested StudIP instances
