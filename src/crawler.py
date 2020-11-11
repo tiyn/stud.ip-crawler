@@ -40,7 +40,7 @@ class Crawler:
             self.create_dir(subdir_path)
             os.chdir(subdir_path)
             self.download_folder_rec(subdir, subdir_path)
-        log.info('Finished crawling folder ' + folder)
+        log.info('finished crawling folder ' + folder)
 
     def download_course(self, course, base_dir):
         """Download all documents in course.
@@ -55,7 +55,7 @@ class Crawler:
         os.chdir(base_dir)
         root = self.studip.get_top_folder(course)
         self.download_folder_rec(root, base_dir)
-        log.info('Finished crawling course ' + course)
+        log.info('finished crawling course ' + course)
 
     def download_curr_courses(self, base_dir):
         """Download all documents of all current courses.
@@ -74,7 +74,7 @@ class Crawler:
             course_name = curr_courses[course].replace('/', '-')
             path = os.path.join(base_dir, course_name)
             self.download_course(course, path)
-        log.info('Finished crawling all current courses')
+        log.info('finished crawling all current courses')
 
     def create_dir(self, dir):
         """Creates a dir if it doesnt exist already.
@@ -83,5 +83,5 @@ class Crawler:
         dir(string): directory path to create
         """
         if not os.path.exists(dir):
-            log.info('creating folder' + dir)
+            log.info('creating folder ' + dir)
             os.mkdir(dir)

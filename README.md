@@ -32,7 +32,8 @@ the last time running it.
 
 ### Errors and workarounds
 
-- [ ] if filename is too long it currently gets skipped
+- [ ] If filename is too long it currently gets skipped
+- [ ] Filenames get sometimes displayed wrong (probably utf8 problems)
 
 ## Installation
 

@@ -121,11 +121,17 @@ class Studip:
         list(string): ids of the documents
         """
         rsp = self.auth_req('/api.php/folder/' + folder)
-        docs = rsp.json()['file_refs']
         res_docs = []
+        try:
+            docs = rsp.json()['file_refs']
+        except ValueError:
+            return res_docs
         for doc in docs:
-            doc_id = doc['id']
-            res_docs.append(doc_id)
+            try:
+                doc_id = doc['id']
+                res_docs.append(doc_id)
+            except KeyError:
+                return res_docs
         return(res_docs)
 
     def download(self, doc):
@@ -161,11 +167,17 @@ class Studip:
         Returns:
         list(string): ids of the subdirectories
         """
-        rsp = self.auth_req('/api.php/folder/' + folder)
-        subdirs = rsp.json()['subfolders']
         res_subdirs = {}
+        rsp = self.auth_req('/api.php/folder/' + folder)
+        try:
+            subdirs = rsp.json()['subfolders']
+        except ValueError:
+            return res_docs
         for subdir in subdirs:
-            sub_id = subdir['id']
-            sub_name = subdir['name']
-            res_subdirs[sub_id] = sub_name
+            try:
+                sub_id = subdir['id']
+                sub_name = subdir['name']
+                res_subdirs[sub_id] = sub_name
+            except KeyError:
+                return res_subdirs
         return res_subdirs
