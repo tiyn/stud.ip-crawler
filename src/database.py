@@ -2,7 +2,7 @@ import time
 import logging as log
 import os
 
-import pysqlite3
+import sqlite3
 
 
 class Database:
@@ -18,7 +18,7 @@ class Database:
         attributes.
         """
         path = os.path.join(self.DB_DIR, "data.db")
-        return pysqlite3.connect(path)
+        return sqlite3.connect(path)
 
     def setup_db(self):
         """Creates a database with tables."""
@@ -43,9 +43,9 @@ class Database:
         crs = db.cursor()
         log.debug('file: ' + file_id + ' time: ' + time)
         query = "INSERT INTO " + self.TABLE_FILE + "(`id`,`ch_date`)" + \
-                "VALUES ('" + file_id + "','" + time + "')" + \
-                "ON CONFLICT(`id`) DO UPDATE SET `ch_date` = '" + time + "'"
-        crs.execute(query)
+                "VALUES ( ?, ? )" + \
+                "ON CONFLICT(`id`) DO UPDATE SET `ch_date` = ?"
+        crs.execute(query, (file_id, time, time))
         db.commit()
 
     def get_last_file_dl(self, file_id):
@@ -61,8 +61,8 @@ class Database:
             return None
         db = self.connect()
         crs = db.cursor()
-        query = "SELECT ch_date FROM files WHERE id ='" + file_id + "'"
-        crs.execute(query)
+        query = "SELECT ch_date FROM files WHERE id = ?"
+        crs.execute(query, (file_id, ))
         res = crs.fetchone()
         if res != None:
             return res[0]
