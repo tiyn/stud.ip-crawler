@@ -56,21 +56,20 @@ Run `python3 run.py -h` for a help menu and see which ones are important for you
 #### Environment-variables
 
 Set the following variables with the -e tag.
-| Name | Usage | Default |
-| ---- |------ | ------- |
-| `USER` | username on the studip server | `admin` |
-| `PSWD` | password on the studip server | `admin` |
-| `URL` | url of the studip server | `admin` |
-| `HOST` | ip of the mysql instance to connect | `mysql` |
-| `DB_USER` | username of the mysql instance to connect | `root` |
-| `DB_PSWD` | password of the mysql instance to connect | `root` |
-| `INTERVAl` | update interval in seconds | `86400` |
+
+| Name       | Usage                         | Default |
+| ---------- | ----------------------------- | ------- |
+| `USER`     | username on the studip server | `admin` |
+| `PSWD`     | password on the studip server | `admin` |
+| `URL`      | url of the studip server      | `admin` |
+| `INTERVAl` | update interval in seconds    | `86400` |
 
 #### Volumes
 
 Set the following volumes with the -v tag.
-| Volume-Name | Container mount | Description |
-| ----------- | --------------- | ----------------------------------- |
+
+| Volume-Name   | Container mount    | Description                               |
+| ------------- | ------------------ | ----------------------------------------- |
 | `studip_data` | `/studip/src/data` | directory for studip files to be saved to |
 
 #### docker-compose.yml

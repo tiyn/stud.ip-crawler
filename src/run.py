@@ -6,7 +6,7 @@ import logging as log
 
 from studip import Studip
 from crawler import Crawler
-from mysql import Database
+from database import Database
 
 
 parser = argparse.ArgumentParser(description='Download Files from StudIP.')
@@ -21,14 +21,6 @@ parser.add_argument('--chunk', type=int, default=1024 *
                     1024, help='chunksize for downloading data')
 parser.add_argument('-r', '--reset_dl_date', action='store_true',
                     help='downloads everything and ignores last download date')
-parser.add_argument('--host', type=str, default='localhost', help='mysql host')
-parser.add_argument('--port', type=int, default=3306, help='mysql port')
-parser.add_argument('--db_name', type=str, default='studip',
-                    help='mysql database name')
-parser.add_argument('--db_user', type=str, default='root',
-                    help='mysql database user')
-parser.add_argument('--db_passwd', type=str,
-                    default='secret-pw', help='mysql database password')
 parser.add_argument('-d', '--debug_output', action='store_true',
                     help='display debug information about the process')
 parser.add_argument('-q', '--quiet', action='store_true',
@@ -53,8 +45,7 @@ BASE_DIR = os.path.abspath(args.output)
 USERNAME = args.user
 PASSWORD = args.passwd
 
-db = Database(args.host, args.port, args.db_name,
-              args.db_user, args.db_passwd, args.reset_dl_date)
+db = Database(args.reset_dl_date)
 
 studip = Studip(args.chunk, args.url, (USERNAME, PASSWORD), db)
 

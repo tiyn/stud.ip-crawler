@@ -146,13 +146,10 @@ class Studip:
         last_dl = self.db.get_last_file_dl(doc)
         if last_dl == None or last_dl < doc_chdate:
             rsp2 = self.auth_req('/api.php/file/' + doc + '/download')
-            #total_size = int(rsp2.headers.get('content-length', 0))
             log.info('downloading ' + doc_name)
-            #progbar = tqdm(total=total_size, unit='iB', unit_scale=True)
             try:
                 with open(doc_name, 'wb') as doc_file:
                     for chunk in rsp2.iter_content(self.CHUNK_SIZE):
-                        #progbar.update(len(chunk))
                         doc_file.write(chunk)
                 self.db.set_last_file_dl(str(doc), str(int(time.time())))
             except OSError:
@@ -172,7 +169,7 @@ class Studip:
         try:
             subdirs = rsp.json()['subfolders']
         except ValueError:
-            return res_docs
+            return res_subdirs
         for subdir in subdirs:
             try:
                 sub_id = subdir['id']

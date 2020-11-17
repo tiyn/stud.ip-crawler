@@ -1,3 +1,2 @@
-tqdm==4.46.1
-requests==2.23.0
-PyMySQL==0.9.3
+pysqlite3==0.4.3
+requests==2.24.0
