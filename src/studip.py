@@ -176,5 +176,5 @@ class Studip:
                 sub_name = subdir['name']
                 res_subdirs[sub_id] = sub_name
             except KeyError:
-                return res_subdirs
+                continue
         return res_subdirs
